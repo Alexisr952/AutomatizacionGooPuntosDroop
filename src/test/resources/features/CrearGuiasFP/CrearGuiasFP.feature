@@ -1,7 +1,6 @@
-Feature: Crear Guías FP
+Feature: Recibir en Punto Droop
 
-  Scenario: Crear una guía FP
-    Given  Que estoy en la pantalla de recogidas de la aplicacion
-    When Estoy en la pantalla de Recogidas MX
-    Then Ingreso los campos para crear una recogida
-    Then Creo una guía de recogida
+  Scenario: Recibir en Punto Droop
+    Given  Que estoy en la pantalla de Login de la aplicacion
+    When Estoy en el inicio de la aplicacion
+    Then Ingreso a Recibir en Punto Droop y leo las guias

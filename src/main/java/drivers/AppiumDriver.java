@@ -31,7 +31,7 @@ public class AppiumDriver {
                         capabilities.setCapability("udid", "ZE222NGZHZ");*/
 
 //Fabian
-            capabilities.setCapability("autoGrantPermissions", true);
+ /**           capabilities.setCapability("autoGrantPermissions", true);
             capabilities.setCapability("deviceName", "RZCWC0H5P9N");
             capabilities.setCapability("platformName", "Android");
             capabilities.setCapability("platformVersion", "15");
@@ -42,7 +42,21 @@ public class AppiumDriver {
             capabilities.setCapability("nativeWebTap", true);
             capabilities.setCapability("appium:eventTimings", true);
             capabilities.setCapability("newCommandTimeout", 45000);
-            capabilities.setCapability("udid", "RZCWC0H5P9N");
+            capabilities.setCapability("udid", "RZCWC0H5P9N");*/
+
+//Jp           
+            capabilities.setCapability("autoGrantPermissions", true);
+            capabilities.setCapability("deviceName", "fd99d00a");
+            capabilities.setCapability("platformName", "Android");
+            capabilities.setCapability("platformVersion", "11");
+            capabilities.setCapability("automationName", "UiAutomator2");
+            capabilities.setCapability("appPackage", "com.coordinadora.timgoo.qa");
+            capabilities.setCapability("appActivity", "com.coordinadora.timgoo.Session.View.activities.LoginUsernameActivity");
+            capabilities.setCapability("noReset", true);
+            capabilities.setCapability("nativeWebTap", true);
+            capabilities.setCapability("appium:eventTimings", true);
+            capabilities.setCapability("newCommandTimeout", 45000);
+            capabilities.setCapability("udid", "fd99d00a");
 
 
 

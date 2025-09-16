@@ -56,6 +56,9 @@ public final class PantallaPerfil {
     private static final Target CARNETDIGITAL = Target.the("Se utiliza para ingresar al carnet digital").locatedBy("//android.widget.RelativeLayout[@resource-id=\"com.coordinadora.timgoo.qa:id/CardCarnetDigital\"]");
     private static final Target BOTONDESCARGARQR = Target.the("Se utiliza para descargar el QR del Carnet Digital").locatedBy("//android.widget.Button[@resource-id=\"com.coordinadora.timgoo.qa:id/btnDescargarQr\"]");
     private static final Target CERRARCARNETDIGITAL = Target.the("Se utiliza para ingresar al carnet digital").locatedBy("//android.widget.Button[@resource-id=\"com.coordinadora.timgoo.qa:id/btnCerrarCarnetDigital\"]");
+    
+    private static final Target MENU_HAMBUGUESA = Target.the("Boton para el menu hamburguesa").locatedBy("//android.widget.FrameLayout[@content-desc='Más']");
+    private static final Target PUNTO_DROOP = Target.the("Boton para opcion puntos droop").located(By.id("com.coordinadora.timgoo.qa:id/lnDroop"));    
 
     /**
      * Ingresa un número de equipo de trabajo en el campo correspondiente.
@@ -285,6 +288,20 @@ public final class PantallaPerfil {
                 WaitUntil.the(PLANB, isClickable()),
                 WaitUntil.the(PLANB, isVisible()),
                 Click.on(PLANB));
+    }
+
+     public static Performable presionarMenuHamburguesa() {
+        return Task.where("Acceder al menu hamburguesa",
+                WaitUntil.the(MENU_HAMBUGUESA, isClickable()),
+                WaitUntil.the(MENU_HAMBUGUESA, isVisible()),
+                Click.on(MENU_HAMBUGUESA));
+    }
+
+      public static Performable presionarPuntosDroop() {
+        return Task.where("Acceder a opcion Puntos Droop",
+                WaitUntil.the(PUNTO_DROOP, isClickable()),
+                WaitUntil.the(PUNTO_DROOP, isVisible()),
+                Click.on(PUNTO_DROOP));
     }
 }
 
