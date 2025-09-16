@@ -34,6 +34,7 @@ import org.apache.pdfbox.text.PDFTextStripper;
 import net.serenitybdd.screenplay.actors.OnStage;
 import net.serenitybdd.screenplay.actors.OnlineCast;
 import java.util.concurrent.TimeUnit;
+import static drivers.AppiumDriver.driver;
 
 /**
  * Clase base vacía para la pantalla de Puntos Droop.
@@ -64,21 +65,49 @@ public final class PantallaPuntosDroop {
      */
     public static List<GuiaInfo> extraerGuiasDesdePdf(Path pdfPath) throws IOException {
         String texto = extraerTextoPdf(pdfPath);
-        Pattern patron = Pattern.compile("GUIA:\\s*(\\d+\\.\\d+).*?UNIDAD\\s([\\d/]+)", Pattern.DOTALL);
-        Matcher matcher = patron.matcher(texto);
+        System.out.println("📄 Contenido del PDF (primeros 1000 caracteres):");
+        System.out.println(texto.substring(0, Math.min(1000, texto.length())));
+        System.out.println("📄 Total de caracteres en el PDF: " + texto.length());
+        
+        // Patrones más flexibles para diferentes formatos
+        Pattern[] patrones = {
+            Pattern.compile("GUIA:\\s*(\\d+\\.\\d+).*?UNIDAD\\s([\\d/]+)", Pattern.DOTALL),
+            Pattern.compile("GUIA\\s*:\\s*(\\d+\\.\\d+).*?UNIDAD\\s*([\\d/]+)", Pattern.DOTALL),
+            Pattern.compile("GUIA\\s*(\\d+\\.\\d+).*?UNIDAD\\s*([\\d/]+)", Pattern.DOTALL),
+            Pattern.compile("(\\d+\\.\\d+).*?UNIDAD\\s*([\\d/]+)", Pattern.DOTALL),
+            Pattern.compile("GUIA.*?(\\d+\\.\\d+).*?UNIDAD.*?([\\d/]+)", Pattern.DOTALL)
+        };
 
         List<GuiaInfo> resultado = new ArrayList<>();
-        while (matcher.find()) {
-            String guia = matcher.group(1); // p.e. 123456789.1
-            String unidad = matcher.group(2); // p.e. 2/5
+        
+        for (int i = 0; i < patrones.length; i++) {
+            Pattern patron = patrones[i];
+            Matcher matcher = patron.matcher(texto);
+            System.out.println("🔍 Probando patrón " + (i+1) + ": " + patron.pattern());
+            
+            int coincidencias = 0;
+            while (matcher.find()) {
+                coincidencias++;
+                String guia = matcher.group(1); // p.e. 123456789.1
+                String unidad = matcher.group(2); // p.e. 2/5
 
-            String codigoRemision = guia.split("\\.")[0];
-            String[] partesUnidad = unidad.split("/");
-            String unidadNum = partesUnidad[0];
-            String etiqueta1d = "7" + codigoRemision + String.format("%03d", Integer.parseInt(unidadNum));
+                String codigoRemision = guia.split("\\.")[0];
+                String[] partesUnidad = unidad.split("/");
+                String unidadNum = partesUnidad[0];
+                String etiqueta1d = "7" + codigoRemision + String.format("%03d", Integer.parseInt(unidadNum));
 
-            resultado.add(new GuiaInfo(codigoRemision, etiqueta1d));
+                resultado.add(new GuiaInfo(codigoRemision, etiqueta1d));
+                System.out.println("✅ Encontrada guía: " + guia + " -> " + etiqueta1d);
+            }
+            System.out.println("📊 Coincidencias con patrón " + (i+1) + ": " + coincidencias);
+            
+            if (coincidencias > 0) {
+                System.out.println("🎯 Usando patrón " + (i+1) + " con " + coincidencias + " coincidencias");
+                break;
+            }
         }
+        
+        System.out.println("📋 Total de guías extraídas: " + resultado.size());
         return resultado;
     }
 
@@ -132,9 +161,19 @@ public final class PantallaPuntosDroop {
                 System.out.println("📝 Ingresando guía: " + g.getEtiqueta1d());
                 actor.attemptsTo(
                         Click.on(CAMPO_LECTURA),
-                        Enter.keyValues(g.getEtiqueta1d()).into(CAMPO_LECTURA),
-                        Hit.the(Keys.ENTER).into(CAMPO_LECTURA)
+                        Enter.keyValues(g.getEtiqueta1d()).into(CAMPO_LECTURA)
                 );
+                
+                // Presionar Enter usando el teclado virtual
+                try {
+                    driver.pressKey(new io.appium.java_client.android.nativekey.KeyEvent(io.appium.java_client.android.nativekey.AndroidKey.ENTER));
+                    System.out.println("⌨️ Presionado Enter del teclado virtual");
+                } catch (Exception e) {
+                    System.out.println("⚠️ Error al presionar Enter: " + e.getMessage());
+                    // Fallback: intentar con Hit.the
+                    actor.attemptsTo(Hit.the(Keys.ENTER).into(CAMPO_LECTURA));
+                }
+                
                 PantallaPuntosDroop.waitTime(1000);
             }
             System.out.println("✅ Finalizado ingreso de guías");
