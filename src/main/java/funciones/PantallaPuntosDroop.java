@@ -121,12 +121,15 @@ public final class PantallaPuntosDroop {
 
         @Override
         public <T extends Actor> void performAs(T actor) {
+            System.out.println("🔍 Iniciando ingreso de " + guias.size() + " guías");
+            
             actor.attemptsTo(
                     WaitUntil.the(CAMPO_LECTURA, isVisible()),
                     WaitUntil.the(CAMPO_LECTURA, isClickable())
             );
             
             for (GuiaInfo g : guias) {
+                System.out.println("📝 Ingresando guía: " + g.getEtiqueta1d());
                 actor.attemptsTo(
                         Click.on(CAMPO_LECTURA),
                         Enter.keyValues(g.getEtiqueta1d()).into(CAMPO_LECTURA),
@@ -134,6 +137,7 @@ public final class PantallaPuntosDroop {
                 );
                 PantallaPuntosDroop.waitTime(1000);
             }
+            System.out.println("✅ Finalizado ingreso de guías");
         }
     }
 
