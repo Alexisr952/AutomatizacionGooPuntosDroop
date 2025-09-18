@@ -10,7 +10,7 @@ import io.cucumber.junit.CucumberOptions;
 
 @RunWith(CucumberWithSerenity.class)
 @CucumberOptions(
-        features = "src/test/resources/features/CrearGuiasFP/CrearGuiasFP.feature",
+        features = "src/test/resources/features/RecibirEnPuntosDroop/RecibirEnPuntosDroop.feature",
         glue = "StepDefinitions",
         plugin = {"pretty", "html:target/cucumber-reports/cucumber.html", "json:target/cucumber-reports/cucumber.json"}
         //tags = "@integracionContinua"

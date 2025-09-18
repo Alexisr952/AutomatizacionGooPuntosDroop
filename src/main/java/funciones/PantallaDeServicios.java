@@ -61,9 +61,6 @@ public final class PantallaDeServicios {
 
     private static final Target PRESIONARREINTENTAR = Target.the("Presionar reintentar en la pantalla fallidas").locatedBy("//android.widget.TextView[@text=\"Reintentar\"]");
 
-
-
-
     /**
      * Presiona el botón para retroceder a la pantalla de servicios.
      *

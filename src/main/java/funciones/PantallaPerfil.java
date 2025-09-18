@@ -303,6 +303,15 @@ public final class PantallaPerfil {
                 WaitUntil.the(PUNTO_DROOP, isVisible()),
                 Click.on(PUNTO_DROOP));
     }
+
+    public static Performable presionarBotonPerfil() {
+        return Task.where("Acceder a opcion Perfil",
+                WaitUntil.the(INGRESAR_PANTALLA_PERFIL, isClickable()),
+                WaitUntil.the(INGRESAR_PANTALLA_PERFIL, isVisible()),
+                Click.on(INGRESAR_PANTALLA_PERFIL));
+    }
+
+    
 }
 
 
