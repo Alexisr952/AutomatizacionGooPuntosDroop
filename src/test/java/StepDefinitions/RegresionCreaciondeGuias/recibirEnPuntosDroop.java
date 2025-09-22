@@ -21,7 +21,7 @@ import io.cucumber.java.en.When;
 //import java.time.Duration;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import funciones.PantallaPuntosDroop.GuiaInfo;
+import utils.GuiaInfo;
 
 public class recibirEnPuntosDroop {
 
@@ -73,7 +73,7 @@ public class recibirEnPuntosDroop {
             if (!java.nio.file.Files.exists(pdf)) {
                 throw new AssertionError("❌ No se encuentra el PDF en: " + pdf.toAbsolutePath());
             }
-            guias = PantallaPuntosDroop.extraerGuiasDesdePdf(pdf);
+            guias = utils.GuiaDataReader.leerGuiasDesdePdf(pdf);
         } catch (Exception e) {
             throw new AssertionError("❌ Error al leer las guías: " + e.getMessage());
         }

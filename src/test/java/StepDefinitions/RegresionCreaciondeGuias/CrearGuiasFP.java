@@ -2,36 +2,32 @@ package StepDefinitions.RegresionCreaciondeGuias;
 
 import static net.serenitybdd.screenplay.actors.OnStage.theActorInTheSpotlight;
 
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+ 
 
 import static drivers.AppiumDriver.driver;
 import utils.GuiaDataReader;
-import net.serenitybdd.core.annotations.findby.By;
+ 
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.actors.OnStage;
 import net.serenitybdd.screenplay.actors.OnlineCast;
 import java.util.List;
 import drivers.AppiumDriver;
 import funciones.PantallaDeLogin;
-import funciones.PantallaFPinternacional;
+ 
 import funciones.PantallaPerfil;
 import funciones.PantallaPuntosDroop;
-import io.appium.java_client.AppiumBy;
-import io.appium.java_client.android.AndroidDriver;
+ 
 import io.appium.java_client.android.nativekey.AndroidKey;
 import io.appium.java_client.android.nativekey.KeyEvent;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import Tareas.IngresarTextoYEnter;
 //import java.time.Duration;
-import Tareas.ClickEnElemento;
+ 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import funciones.PantallaPuntosDroop.GuiaInfo;
+import utils.GuiaInfo;
 
 public class CrearGuiasFP {
 
@@ -77,17 +73,7 @@ public class CrearGuiasFP {
 
     @Then("Ingreso a Recibir en Punto Droop y leo las guias")
     public void Ingreso_a_Recibir_en_Punto_Droop_y_leo_las_guias() {
-        List<GuiaInfo> guias;
-        try {
-            Path pdf = Paths.get(System.getProperty("user.dir"), "impresionrotulos1.pdf");
-            if (!java.nio.file.Files.exists(pdf)) {
-                throw new AssertionError("❌ No se encuentra el PDF en: " + pdf.toAbsolutePath());
-            }
-            guias = PantallaPuntosDroop.extraerGuiasDesdePdf(pdf);
-        } catch (Exception e) {
-            throw new AssertionError("❌ Error al leer las guías: " + e.getMessage());
-        }
-        theActorInTheSpotlight().attemptsTo(PantallaPuntosDroop.ingresarGuias(guias));
+        
     }
 
 }

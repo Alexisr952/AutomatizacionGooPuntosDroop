@@ -3,12 +3,8 @@ package funciones;
 import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isClickable;
 import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import utils.GuiaInfo;
 
 import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.Task;
@@ -19,20 +15,12 @@ import net.serenitybdd.screenplay.targets.Target;
 import net.serenitybdd.screenplay.waits.WaitUntil;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 
 import net.serenitybdd.screenplay.Actor;
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 
-import net.serenitybdd.screenplay.actions.EnterValue;
+ 
 
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.text.PDFTextStripper;
-
-import net.serenitybdd.screenplay.actors.OnStage;
-import net.serenitybdd.screenplay.actors.OnlineCast;
 import java.util.concurrent.TimeUnit;
 import static drivers.AppiumDriver.driver;
 
@@ -81,80 +69,7 @@ public final class PantallaPuntosDroop {
                 Click.on(BOTON_VER_SERVICIOS));
     }
 
-    /**
-     * Lee un PDF y extrae las guías con sus unidades, construyendo la etiqueta 1D.
-     * Coincide con el patrón: GUIA: <numero.con.decimal> ... UNIDAD <n/total>
-     * Ej.: GUIA: 123456789.1 UNIDAD 2/5 -> etiqueta1d: 77 + 123456789 + 002
-     *
-     * @param pdfPath ruta al archivo PDF
-     * @return lista de GuiaInfo con codigoRemision y etiqueta1d
-     * @throws IOException si falla la lectura del PDF
-     */
-    public static List<GuiaInfo> extraerGuiasDesdePdf(Path pdfPath) throws IOException {
-        String texto = extraerTextoPdf(pdfPath);
-
-        // Patrones más flexibles para diferentes formatos
-        Pattern[] patrones = {
-                Pattern.compile("GUIA:\\s*(\\d+\\.\\d+).*?UNIDAD\\s([\\d/]+)", Pattern.DOTALL),
-                Pattern.compile("GUIA\\s*:\\s*(\\d+\\.\\d+).*?UNIDAD\\s*([\\d/]+)", Pattern.DOTALL),
-                Pattern.compile("GUIA\\s*(\\d+\\.\\d+).*?UNIDAD\\s*([\\d/]+)", Pattern.DOTALL),
-                Pattern.compile("(\\d+\\.\\d+).*?UNIDAD\\s*([\\d/]+)", Pattern.DOTALL),
-                Pattern.compile("GUIA.*?(\\d+\\.\\d+).*?UNIDAD.*?([\\d/]+)", Pattern.DOTALL)
-        };
-
-        List<GuiaInfo> resultado = new ArrayList<>();
-
-        for (int i = 0; i < patrones.length; i++) {
-            Pattern patron = patrones[i];
-            Matcher matcher = patron.matcher(texto);
-
-            int coincidencias = 0;
-            while (matcher.find()) {
-                coincidencias++;
-                String guia = matcher.group(1); // p.e. 123456789.1
-                String unidad = matcher.group(2); // p.e. 2/5
-
-                String codigoRemision = guia.split("\\.")[0];
-                String[] partesUnidad = unidad.split("/");
-                String unidadNum = partesUnidad[0];
-                String etiqueta1d = "7" + codigoRemision + String.format("%03d", Integer.parseInt(unidadNum));
-
-                resultado.add(new GuiaInfo(codigoRemision, etiqueta1d));
-            }
-
-            if (coincidencias > 0) {
-                System.out.println("🎯 Usando patrón " + (i + 1) + " con " + coincidencias + " coincidencias");
-                break;
-            }
-        }
-
-        return resultado;
-    }
-
-    private static String extraerTextoPdf(Path pdfPath) throws IOException {
-        try (PDDocument doc = PDDocument.load(pdfPath.toFile())) {
-            PDFTextStripper stripper = new PDFTextStripper();
-            return stripper.getText(doc);
-        }
-    }
-
-    public static final class GuiaInfo {
-        private final String codigoRemision;
-        private final String etiqueta1d;
-
-        public GuiaInfo(String codigoRemision, String etiqueta1d) {
-            this.codigoRemision = codigoRemision;
-            this.etiqueta1d = etiqueta1d;
-        }
-
-        public String getCodigoRemision() {
-            return codigoRemision;
-        }
-
-        public String getEtiqueta1d() {
-            return etiqueta1d;
-        }
-    }
+    // La lectura de guías desde PDF fue movida a utils.GuiaDataReader
 
     public static Performable ingresarGuias(List<GuiaInfo> guias) {
         return instrumented(IngresarGuiasTask.class, guias);
